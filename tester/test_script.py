@@ -1,9 +1,13 @@
 import sys
 import os
 import requests
+import time
 
 # get target host from environment, default to localhost
 target_host = os.environ.get('TARGET_HOST', 'localhost')
+
+print("Waiting 3s for Nginx to initialize SSL...")
+time.sleep(3)
 
 try:
     # checking port 8080 : should return 200 or "Solved"
@@ -23,6 +27,15 @@ try:
     if response.status_code != 500:
         print("Failed to confrim error code on port 8081")
         sys.exit(1)
+
+    url = f"https://{target_host}/"
+    print(f"Checking {url}")
+    response = requests.get(url, verify=False)
+
+    if response.status_code != 200:
+        print("Failed to confirm SSL test on port 443")
+        sys.exit(1)
+        
 
     print("Tests passed")
     sys.exit(0)
