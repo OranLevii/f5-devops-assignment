@@ -73,4 +73,4 @@ I wrote a Python script that:
 Committing private keys to a repository is a security vulnerability. 
 
 * **Local Development:** The instructions above show how to generate them securely on your machine.
-* **Continuous Integration (GitHub Actions):** My CI pipeline (`.github/workflows/ci.yml`) automatically creates a temporary "dummy" certificate just for the duration of the test. This ensures the code is tested on every push without leaking secrets!
+* **Continuous Integration (GitHub Actions):** My CI pipeline (`.github/workflows/ci.yaml`) automatically creates a temporary "dummy" certificate just for the duration of the test. This ensures the code is tested on every push without leaking secrets!
