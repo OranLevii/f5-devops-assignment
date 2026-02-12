@@ -1,0 +1,14 @@
+services:
+    # nginx web server
+    nginx_server:
+        build: ./nginx_server
+        ports:
+            - "8080:8080"
+            - "8081:8081"
+    # test script
+    tester:
+        build: ./tester
+        environment:
+            - TARGET_HOST=nginx_server
+        depends_on:
+            - nginx_server
