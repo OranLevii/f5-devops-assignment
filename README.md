@@ -57,7 +57,7 @@ Here is how I solved the challenge:
 ### 1. Containerization (Docker)
 I created two custom Docker images:
 * **Nginx Server:** Built on `ubuntu:24.04`. It installs Nginx and copies the configuration and generated certificates into the correct folders.
-* **Tester:** Built on `python:3.9-slim`. It acts as an automated client to verify the server's behavior.
+* **Tester:** Built on `python:3.11-slim`. It acts as an automated client to verify the server's behavior.
 
 ### 2. Automation (`test_script.py`)
 I wrote a Python script that:
