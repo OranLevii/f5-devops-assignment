@@ -61,9 +61,13 @@ I created two custom Docker images:
 
 ### 2. Automation (`test_script.py`)
 I wrote a Python script that:
-* **Waits for Service:** Uses a retry loop to prevent the test from failing while Nginx is still starting up.
+* **Waits for Service:** Waits a few seconds to give Nginx time to initialize before running the tests.
 * **Verifies requests:** The expected behaviour (response code / response content).
 * **Verifies SSL:** Connects to the HTTPS port (ignoring self-signed warnings) to ensure the SSL handshake works.
+* **Rate limiting:** Uses Python threads to send 20 requests nearly simultaneously to the HTTP endpoint. This simulates concurrent traffic to test the Nginx rate limiter.
+
+**Note**
+On local Docker setups, the rate limit may not appear to trigger and all requests can return HTTP 200. This happens because Docker’s internal networking can buffer requests, making them appear sequential. The configuration is still correct and will block excess requests in real deployments or CI environments.
 
 ---
 
