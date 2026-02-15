@@ -2,6 +2,7 @@ import sys
 import os
 import requests
 import time
+import threading
 
 # get target host from environment, default to localhost
 target_host = os.environ.get('TARGET_HOST', 'localhost')
@@ -30,11 +31,41 @@ try:
 
     url = f"https://{target_host}/"
     print(f"Checking {url}")
-    response = requests.get(url, verify=False)
+    response = requests.get(url, verify=False)  # ignore self signed cert warning
 
     if response.status_code != 200:
         print("Failed to confirm SSL test on port 443")
         sys.exit(1)
+
+
+    # rate limit test
+    print("Testing rate limiting on {target_host}:8080")
+    # store status codes from threads
+    results = [] 
+    #function that each thread will run
+    def attack():
+        try:
+            r = requests.get(f"http://{target_host}:8080/")
+            results.append(r.status_code)
+        except:
+            pass # ignores failed requests
+
+    # creates 20 threads that run the attack function
+    threads = [threading.Thread(target=attack) for _ in range(20)]
+
+    # start all threads
+    for t in threads: t.start()
+
+    # wait for all threads to finish
+    for t in threads: t.join()
+
+    blocked_count = results.count(429)
+    success_count = results.count(200)
+
+    if blocked_count > 0:
+        print("Rate limit verified")
+    else:
+        print("Rate limit not triggered")
         
 
     print("Tests passed")
