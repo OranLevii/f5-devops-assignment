@@ -3,7 +3,7 @@ FROM ubuntu:24.04
 
 # Update lists. Install nginx. Delete lists to save space
 RUN apt-get update && \
-    apt-get install -y nginx-extras && \
+    apt-get install -y nginx && \
     rm /etc/nginx/sites-enabled/default && \
     rm -rf /var/lib/apt/lists/*
 
